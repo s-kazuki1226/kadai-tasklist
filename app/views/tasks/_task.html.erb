@@ -1,0 +1,22 @@
+<% if task.any? %>
+  <ul class="list-unstyled mt-2">
+    <% @tasks.each do |t| %>
+      <li class="d-flex">
+        <img class="rounded me-2 mb-5" src="<%= gravatar_url(t.user, { size: 64 }) %>" alt="">
+        <div>
+          <div>
+            <%= link_to t.user.name, user_path(t.user), class: "text-decoration-none" %> <span class="text-muted">posted at <%= t.created_at %></span>
+          </div>
+          <div>
+            <%= t.status %> : <%= t.content %> 
+          <div>
+            <% if current_user == t.user %>
+              <%= link_to "Delete", t, method: :delete, data: { confirm: "You sure?" }, class: 'btn btn-danger btn-sm' %>
+            <% end %>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+  <%== pagy_bootstrap_nav(@pagy) %>
+<% end %>

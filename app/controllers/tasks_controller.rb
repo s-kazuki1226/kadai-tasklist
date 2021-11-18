@@ -1,6 +1,8 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.all
+    if logged_in?
+      @pagy, @tasks = pagy(current_user.task.order(id: :desc))
+    end  
   end
 
   def show
@@ -8,11 +10,13 @@ class TasksController < ApplicationController
   end
 
   def new
-    @task = Task.new
+    if logged_in?
+      @task = current_user.task.build  
+    end
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = current_user.task.build(task_params)
 
     if @task.save
       flash[:success] = 'Task が正常に投稿されました'
@@ -44,7 +48,7 @@ class TasksController < ApplicationController
     @task.destroy
 
     flash[:success] = 'Task は正常に削除されました'
-    redirect_to tasks_url
+    redirect_back(fallback_location: tasks_url)
   end
 
 
@@ -52,5 +56,12 @@ class TasksController < ApplicationController
   
   def task_params
     params.require(:task).permit(:content, :status)
+  end
+  
+   def correct_user
+    @task = current_user.tasks.find_by(id: params[:id])
+    unless @task
+      redirect_to root_url
+    end
   end
 end  
