@@ -4,9 +4,7 @@
       <li class="d-flex">
         <img class="rounded me-2 mb-5" src="<%= gravatar_url(t.user, { size: 64 }) %>" alt="">
         <div>
-          <div>
-            <%= link_to t.user.name, user_path(t.user), class: "text-decoration-none" %> <span class="text-muted">posted at <%= t.created_at %></span>
-          </div>
+          <span class="text-muted">posted at <%= t.created_at %></span>
           <div>
             <%= t.status %> : <%= t.content %> 
           <div>
